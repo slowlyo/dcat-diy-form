@@ -1,0 +1,177 @@
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .diy-card {
+        background: #fff;
+        border-radius: .25rem;
+        padding: 15px;
+        margin: 5px;
+        overflow: auto;
+        position: relative;
+    }
+
+    .option-area > div:not(:last-child) {
+        margin-bottom: 3px;
+    }
+
+    .preview-item {
+        margin-top: 10px;
+    }
+
+    .the-mask {
+        width: 98%;
+        background: transparent;
+        height: 92%;
+        position: absolute;
+        z-index: 999;
+    }
+</style>
+
+<div class="diy-main" v-cloak>
+    <div style="width: 100%; height: 100%; overflow: auto">
+        <div class="diy-card">
+            @if($show_mask)
+                <div class="the-mask" onclick="maskTips()"></div>
+            @endif
+
+            <div v-for="(item, index) in contents" :key="index">
+                {{--自定义预览html--}}
+                {!! $preview_html !!}
+
+                {{--input--}}
+                <div class="preview-item" v-if="item.type == 'input'" :class="'animate-item-' + index">
+                    <label class="d-flex justify-content-between">
+                        <div>
+                            <span class="text-danger" v-if="item.required == 1">* </span>
+                            @{{ item.label }}
+                        </div>
+                    </label>
+                    <div class="">
+                        <input type="text"
+                               class="form-control form-control-sm"
+                               :value="item.default_value"
+                               :placeholder="`请输入${item.label}`">
+                    </div>
+                </div>
+
+                {{--textarea--}}
+                <div class="preview-item" v-if="item.type == 'textarea'" :class="'animate-item-' + index">
+                    <label class="d-flex justify-content-between">
+                        <div>
+                            <span class="text-danger" v-if="item.required == 1">* </span>
+                            @{{ item.label }}
+                        </div>
+                    </label>
+                    <div class="">
+                        <textarea class="form-control"
+                                  :rows="item.rows"
+                                  :value="item.default_value"></textarea>
+                    </div>
+                </div>
+
+                {{--radio--}}
+                <div class="preview-item" v-if="item.type == 'radio'" :class="'animate-item-' + index">
+                    <label class="d-flex justify-content-between">
+                        <div>
+                            <span class="text-danger" v-if="item.required == 1">* </span>
+                            @{{ item.label }}
+                        </div>
+                    </label>
+                    <div class="">
+                        <div class="custom-control custom-radio custom-control-inline"
+                             v-for="(opt, opt_key) in item.options.values"
+                             :key="opt_key">
+                            <input type="radio"
+                                   :id="'radio_item_' + index + opt_key"
+                                   :name="'radio_' + index"
+                                   :checked="opt == item.default_value"
+                                   class="custom-control-input">
+                            <label class="custom-control-label" :for="'radio_item_' + index + opt_key">
+                                @{{ opt }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                {{--checkbox--}}
+                <div class="preview-item" v-if="item.type == 'checkbox'" :class="'animate-item-' + index">
+                    <label class="d-flex justify-content-between">
+                        <div>
+                            <span class="text-danger" v-if="item.required == 1">* </span>
+                            @{{ item.label }}
+                        </div>
+                    </label>
+                    <div class="">
+                        <div class="custom-control custom-checkbox custom-control-inline"
+                             v-for="(opt, opt_key) in item.options.values"
+                             :key="opt_key">
+                            <input type="checkbox"
+                                   class="custom-control-input"
+                                   :checked="item.default_value.split(',').indexOf(opt) > -1"
+                                   :id="'checkbox_item_' + index + opt_key">
+                            <label class="custom-control-label" :for="'checkbox_item_' + index + opt_key">
+                                @{{ opt }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                {{--select--}}
+                <div class="preview-item" v-if="item.type == 'select'" :class="'animate-item-' + index">
+                    <label class="d-flex justify-content-between">
+                        <div>
+                            <span class="text-danger" v-if="item.required == 1">* </span>
+                            @{{ item.label }}
+                        </div>
+                    </label>
+                    <div class="">
+                        <select class="form-control form-control-sm">
+                            <option
+                                v-for="(opt, opt_key) in item.options.values"
+                                :selected="opt == item.default_value"
+                                :key="opt_key">
+                                @{{ opt }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                {{--upload--}}
+                <div class="preview-item"
+                     v-if="item.type == 'upload-image' || item.type == 'upload-vedio'"
+                     :class="'animate-item-' + index">
+                    <label class="d-flex justify-content-between">
+                        <div>
+                            <span class="text-danger" v-if="item.required == 1">* </span>
+                            @{{ item.label }}
+                        </div>
+                    </label>
+                    <div class="">
+                        <button class="btn btn-default btn-sm" v-on:click="previewTips">
+                            @{{ item.name }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Dcat.ready(function () {
+        Dcat.init('.diy-main', function ($this, id) {
+            new Vue({
+                el: `#${id}`,
+                data: {
+                    contents: {!! $value !!}
+                },
+            })
+        })
+    })
+
+    function maskTips() {
+        Dcat.warning('暂不支持操作表单')
+    }
+</script>

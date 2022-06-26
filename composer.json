@@ -1,0 +1,32 @@
+{
+    "name": "slowlyo/dcat-diy-form",
+    "alias": "",
+    "description": "diy form",
+    "type": "library",
+    "keywords": ["dcat-admin", "extension"],
+    "homepage": "https://github.com/slowlyo/dcat-diy-form",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Slowlyo",
+            "email": "yguren@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "dcat/laravel-admin": "~2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Slowlyo\\DcatDiyForm\\": "src/"
+        }
+    },
+    "extra": {
+        "dcat-admin": "Slowlyo\\DcatDiyForm\\DcatDiyFormServiceProvider",
+        "laravel": {
+            "providers": [
+                "Slowlyo\\DcatDiyForm\\DcatDiyFormServiceProvider"
+            ]
+        }
+    }
+}
