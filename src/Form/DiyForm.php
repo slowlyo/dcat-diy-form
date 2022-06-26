@@ -208,6 +208,20 @@ JS
     }
 
     /**
+     * 自定义主题色
+     *
+     * @param string $color
+     *
+     * @return $this
+     */
+    public function themeColor($color = '')
+    {
+        $this->theme_color = $color;
+
+        return $this;
+    }
+
+    /**
      * 添加预览html
      *
      * @param $html
