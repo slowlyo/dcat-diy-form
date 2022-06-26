@@ -219,7 +219,7 @@
                             </div>
                         </div>
                         <div class="add-btn-div">
-                            <button class="btn btn-primary" v-on:click="addItem">添加</button>
+                            <button type="button" class="btn btn-primary" v-on:click="addItem">添加</button>
                         </div>
                     </div>
                 </div>
@@ -436,7 +436,7 @@
                                     </div>
                                 </label>
                                 <div class="">
-                                    <button class="btn btn-default btn-sm" v-on:click="previewTips">
+                                    <button type="button" class="btn btn-default btn-sm" v-on:click="previewTips">
                                         @{{ item.name }}
                                     </button>
                                 </div>
