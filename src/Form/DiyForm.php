@@ -21,7 +21,7 @@ class DiyForm extends Field
      *
      * @var string
      */
-    protected $theme_color = '#358ffd';
+    protected $theme_color = '';
 
     /**
      * 组件类型
@@ -40,6 +40,7 @@ class DiyForm extends Field
     public function __construct($column, $arguments = [])
     {
         $this->initCompontenType();
+        $this->theme_color = Admin::color()->primary();
 
         parent::__construct($column, $arguments);
     }
