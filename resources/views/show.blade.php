@@ -4,10 +4,9 @@
     }
 
     .diy-card {
-        background: #fff;
         border-radius: .25rem;
-        padding: 15px;
-        margin: 5px;
+        /*padding: 15px;*/
+        /*margin: 5px;*/
         overflow: auto;
         position: relative;
     }
@@ -27,6 +26,10 @@
         position: absolute;
         z-index: 999;
     }
+
+    /*.diy-main .form-control{*/
+    /*    width: 80%;*/
+    /*}*/
 </style>
 
 <div class="diy-main" v-cloak>
@@ -50,7 +53,7 @@
                     </label>
                     <div class="">
                         <input type="text"
-                               class="form-control form-control-sm"
+                               class="form-control"
                                :value="item.default_value"
                                :placeholder="`请输入${item.label}`">
                     </div>
@@ -127,7 +130,7 @@
                         </div>
                     </label>
                     <div class="">
-                        <select class="form-control form-control-sm">
+                        <select class="form-control">
                             <option
                                 v-for="(opt, opt_key) in item.options.values"
                                 :selected="opt == item.default_value"
@@ -161,6 +164,10 @@
 
 <script>
     Dcat.ready(function () {
+        $('.diy-main').parents('.box').css('border', 0).css('box-shadow', '0 0')
+        $('.diy-main').parents('.box-body').css('padding', 0)
+        $('.diy-main').parents('.col-sm-8').css('border-left', '1px solid ' + '{{ Admin::color()->primary() }}')
+
         Dcat.init('.diy-main', function ($this, id) {
             new Vue({
                 el: `#${id}`,
