@@ -152,7 +152,7 @@
                         </div>
                     </label>
                     <div class="">
-                        <button class="btn btn-default btn-sm" v-on:click="previewTips">
+                        <button class="btn btn-default btn-sm" onclick="maskTips()">
                             @{{ item.name }}
                         </button>
                     </div>
