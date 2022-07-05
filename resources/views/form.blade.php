@@ -456,124 +456,126 @@
 </div>
 
 <script init="{!! $selector !!}">
-    new Vue({
-        el: `#${id}`,
-        data: {
-            component_type: {!! admin_javascript_json($component_type) !!},
-            contents: [],
-            current_type: '',
-            submit_value: '',
-        },
-        mounted() {
-            let edit_data = '{!! old($column, $value) !!}'
+    Dcat.ready(function (){
+        new Vue({
+            el: `#${id}`,
+            data: {
+                component_type: {!! admin_javascript_json($component_type) !!},
+                contents: [],
+                current_type: '',
+                submit_value: '',
+            },
+            mounted() {
+                let edit_data = '{!! old($column, $value) !!}'
 
-            if(edit_data){
-                this.contents = JSON.parse(edit_data)
-            }
-        },
-        methods: {
-            // 添加组件
-            addItem() {
-                let data = this.current_type
-                if (!data) {
-                    return Dcat.error('请先选择组件类型')
+                if(edit_data){
+                    this.contents = JSON.parse(edit_data)
                 }
-
-                if (!data.label) {
-                    return Dcat.error('请填写标签')
-                }
-
-                if (data.options) {
-                    if (data.options.values.length < 2) {
-                        return Dcat.error(`请至少添加两个${data.options.label}`)
+            },
+            methods: {
+                // 添加组件
+                addItem() {
+                    let data = this.current_type
+                    if (!data) {
+                        return Dcat.error('请先选择组件类型')
                     }
 
-                    let nullValue = 0
-                    data.options.values.forEach((item) => {
-                        if (item == '') {
-                            nullValue++
+                    if (!data.label) {
+                        return Dcat.error('请填写标签')
+                    }
+
+                    if (data.options) {
+                        if (data.options.values.length < 2) {
+                            return Dcat.error(`请至少添加两个${data.options.label}`)
                         }
-                    })
 
-                    if (nullValue > 0) {
-                        return Dcat.error(data.options.label + '不可为空')
+                        let nullValue = 0
+                        data.options.values.forEach((item) => {
+                            if (item == '') {
+                                nullValue++
+                            }
+                        })
+
+                        if (nullValue > 0) {
+                            return Dcat.error(data.options.label + '不可为空')
+                        }
                     }
-                }
 
-                if (data.validate_handler) {
-                    let message = data.validate_handler(data)
+                    if (data.validate_handler) {
+                        let message = data.validate_handler(data)
 
-                    if (message) {
-                        return Dcat.error(message)
+                        if (message) {
+                            return Dcat.error(message)
+                        }
                     }
+
+                    this.contents.push(this.deepCopy(data))
+                    this.current_type = ''
+                    this.submitValueHandler()
+                },
+                // 选择组件类型
+                selectType(item) {
+                    this.current_type = this.deepCopy(item)
+                },
+                // 添加选项
+                addOptions() {
+                    this.current_type.options.values.push('')
+                },
+                // 移除选项
+                subOptions(index) {
+                    this.current_type.options.values.splice(index, 1)
+                },
+                // 深拷贝
+                deepCopy(value) {
+                    return JSON.parse(JSON.stringify(value))
+                },
+                // 预览功能提示
+                previewTips() {
+                    Dcat.warning('功能预览, 无实际功能')
+                },
+                // 移除预览项
+                subPreviewItem(index) {
+                    this.contents.splice(index, 1)
+                    this.submitValueHandler()
+                },
+                // 预览项上移
+                previewItemGoUp(index) {
+                    $('.animate-item-' + index).fadeOut('fast')
+                    $('.animate-item-' + (index - 1)).fadeOut('fast')
+
+                    setTimeout(() => {
+                        let temp = ''
+                        temp = this.contents[index]
+                        this.contents[index] = this.contents[index - 1]
+                        this.contents[index - 1] = temp
+                        this.$forceUpdate()
+                        this.submitValueHandler()
+
+                        $('.animate-item-' + index).fadeIn('fast')
+                        $('.animate-item-' + (index - 1)).fadeIn('fast')
+                    }, 150)
+                },
+                // 预览项下移
+                previewItemGoDown(index) {
+                    $('.animate-item-' + index).fadeOut('fast')
+                    $('.animate-item-' + (index + 1)).fadeOut('fast')
+
+                    setTimeout(() => {
+                        let temp = ''
+                        temp = this.contents[index]
+                        this.contents[index] = this.contents[index + 1]
+                        this.contents[index + 1] = temp
+                        this.$forceUpdate()
+                        this.submitValueHandler()
+
+                        $('.animate-item-' + index).fadeIn('fast')
+                        $('.animate-item-' + (index + 1)).fadeIn('fast')
+                    }, 150)
+                },
+                submitValueHandler() {
+                    this.submit_value = JSON.stringify(this.contents)
                 }
-
-                this.contents.push(this.deepCopy(data))
-                this.current_type = ''
-                this.submitValueHandler()
-            },
-            // 选择组件类型
-            selectType(item) {
-                this.current_type = this.deepCopy(item)
-            },
-            // 添加选项
-            addOptions() {
-                this.current_type.options.values.push('')
-            },
-            // 移除选项
-            subOptions(index) {
-                this.current_type.options.values.splice(index, 1)
-            },
-            // 深拷贝
-            deepCopy(value) {
-                return JSON.parse(JSON.stringify(value))
-            },
-            // 预览功能提示
-            previewTips() {
-                Dcat.warning('功能预览, 无实际功能')
-            },
-            // 移除预览项
-            subPreviewItem(index) {
-                this.contents.splice(index, 1)
-                this.submitValueHandler()
-            },
-            // 预览项上移
-            previewItemGoUp(index) {
-                $('.animate-item-' + index).fadeOut('fast')
-                $('.animate-item-' + (index - 1)).fadeOut('fast')
-
-                setTimeout(() => {
-                    let temp = ''
-                    temp = this.contents[index]
-                    this.contents[index] = this.contents[index - 1]
-                    this.contents[index - 1] = temp
-                    this.$forceUpdate()
-                    this.submitValueHandler()
-
-                    $('.animate-item-' + index).fadeIn('fast')
-                    $('.animate-item-' + (index - 1)).fadeIn('fast')
-                }, 150)
-            },
-            // 预览项下移
-            previewItemGoDown(index) {
-                $('.animate-item-' + index).fadeOut('fast')
-                $('.animate-item-' + (index + 1)).fadeOut('fast')
-
-                setTimeout(() => {
-                    let temp = ''
-                    temp = this.contents[index]
-                    this.contents[index] = this.contents[index + 1]
-                    this.contents[index + 1] = temp
-                    this.$forceUpdate()
-                    this.submitValueHandler()
-
-                    $('.animate-item-' + index).fadeIn('fast')
-                    $('.animate-item-' + (index + 1)).fadeIn('fast')
-                }, 150)
-            },
-            submitValueHandler() {
-                this.submit_value = JSON.stringify(this.contents)
             }
-        }
+        })
     })
 </script>
