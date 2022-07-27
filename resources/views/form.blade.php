@@ -469,6 +469,7 @@
 
             if (edit_data) {
                 this.contents = JSON.parse(edit_data)
+                this.submitValueHandler()
             }
         },
         methods: {
