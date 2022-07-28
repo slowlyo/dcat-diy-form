@@ -112,7 +112,7 @@
                              :key="opt_key">
                             <input type="checkbox"
                                    class="custom-control-input"
-                                   :checked="item.default_value.split(',').indexOf(opt) > -1"
+                                   :checked="item.default_value ? item.default_value.split(',').indexOf(opt) > -1 : ''"
                                    :id="'checkbox_item_' + index + opt_key">
                             <label class="custom-control-label" :for="'checkbox_item_' + index + opt_key">
                                 @{{ opt }}
@@ -132,9 +132,9 @@
                     <div class="">
                         <select class="form-control">
                             <option
-                                v-for="(opt, opt_key) in item.options.values"
-                                :selected="opt == item.default_value"
-                                :key="opt_key">
+                                    v-for="(opt, opt_key) in item.options.values"
+                                    :selected="opt == item.default_value"
+                                    :key="opt_key">
                                 @{{ opt }}
                             </option>
                         </select>
