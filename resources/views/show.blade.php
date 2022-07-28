@@ -152,9 +152,18 @@
                         </div>
                     </label>
                     <div class="">
-                        <button class="btn btn-default btn-sm" onclick="maskTips()">
-                            @{{ item.name }}
-                        </button>
+                        <div v-if="item.type == 'upload-image'">
+                            <img v-for="(vv, kk) in (item.default_value ? item.default_value.split(',') : [])" :key="kk" :src="vv" alt="" width="150px" height="150px" style="margin: 5px;">
+                        </div>
+                        <div v-else>
+                            <video v-for="(vvv, kkk) in (item.default_value ? item.default_value.split(',') : [])" :key="kkk" width="320" height="240" controls>
+                                <source :src="vvv" type="video/mp4">
+                                您的浏览器不支持 video 标签。
+                            </video>
+                        </div>
+                        {{--<button class="btn btn-default btn-sm" onclick="maskTips()">--}}
+                        {{--    @{{ item.name }}--}}
+                        {{--</button>--}}
                     </div>
                 </div>
             </div>
