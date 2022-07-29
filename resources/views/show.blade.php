@@ -35,9 +35,9 @@
 <div class="diy-main" v-cloak>
     <div style="width: 100%; height: 100%; overflow: auto">
         <div class="diy-card">
-            @if($show_mask)
-                <div class="the-mask" onclick="maskTips()"></div>
-            @endif
+            {{--            @if($show_mask)--}}
+            {{--                <div class="the-mask" onclick="maskTips()"></div>--}}
+            {{--            @endif--}}
 
             <div v-for="(item, index) in contents" :key="index">
                 {{--自定义预览html--}}
@@ -55,6 +55,7 @@
                         <input type="text"
                                class="form-control"
                                :value="item.default_value"
+                               disabled
                                :placeholder="`请输入${item.label}`">
                     </div>
                 </div>
@@ -70,6 +71,7 @@
                     <div class="">
                         <textarea class="form-control"
                                   :rows="item.rows"
+                                  disabled
                                   :value="item.default_value"></textarea>
                     </div>
                 </div>
@@ -90,6 +92,7 @@
                                    :id="'radio_item_' + index + opt_key"
                                    :name="'radio_' + index"
                                    :checked="opt == item.default_value"
+                                   disabled
                                    class="custom-control-input">
                             <label class="custom-control-label" :for="'radio_item_' + index + opt_key">
                                 @{{ opt }}
@@ -113,6 +116,7 @@
                             <input type="checkbox"
                                    class="custom-control-input"
                                    :checked="item.default_value ? item.default_value.split(',').indexOf(opt) > -1 : ''"
+                                   disabled
                                    :id="'checkbox_item_' + index + opt_key">
                             <label class="custom-control-label" :for="'checkbox_item_' + index + opt_key">
                                 @{{ opt }}
@@ -130,7 +134,7 @@
                         </div>
                     </label>
                     <div class="">
-                        <select class="form-control">
+                        <select class="form-control" disabled>
                             <option
                                     v-for="(opt, opt_key) in item.options.values"
                                     :selected="opt == item.default_value"
